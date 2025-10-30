@@ -4,6 +4,10 @@ target/
 !**/src/test/**/target/
 .kotlin
 
+### Lucene Specific Files (DO NOT COMMIT) ###
+# Esclude la cartella di output dell'indice Lucene
+/lucene_index/
+
 ### IntelliJ IDEA ###
 .idea/modules.xml
 .idea/jarRepositories.xml

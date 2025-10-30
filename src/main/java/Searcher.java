@@ -17,11 +17,14 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.nio.file.FileSystems;
 import java.util.Scanner;
 
 public class Searcher {
 
-    private static final String INDEX_PATH = "C:/Users/catal/OneDrive/Desktop/lucene_index";
+    private static final String FILE_SEPARATOR = FileSystems.getDefault().getSeparator();
+
+    private static final String INDEX_PATH = "lucene_index" + FILE_SEPARATOR;
     private static final int MAX_HITS = 10;
 
     public static void main(String[] args) {
@@ -76,15 +79,9 @@ public class Searcher {
         analyzerMap.put("contenuto", new EnglishAnalyzer()); // Ricerca Full-Text
 
         // 1. Inizializzazione del MultiFieldQueryParser
-        // Questo Parser cerca automaticamente in tutti i campi elencati in 'fields'
-        MultiFieldQueryParser parser = new MultiFieldQueryParser(fields, analyzerWrapper); //
+        MultiFieldQueryParser parser = new MultiFieldQueryParser(fields, analyzerWrapper);
 
-        // Opzionale: Trattare l'input con OR logico per default
-        // parser.setDefaultOperator(QueryParser.Operator.OR);
-
-        // 2. Parsing della Query (Input grezzo)
-        // Se l'utente scrive solo "love", il parser crea automaticamente:
-        // (nome_file:love) OR (contenuto:love)
+        // 2. Parsing della Query
         Query query = parser.parse(rawQuery);
 
         System.out.println("\nQuery Eseguita (Finale): " + query.toString());

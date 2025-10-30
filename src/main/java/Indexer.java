@@ -4,7 +4,7 @@ import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
 import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.TextField; // TextField utilizzato per nome_file e contenuto
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
@@ -15,13 +15,15 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.nio.file.FileSystems;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Indexer {
 
-    private static final String DOCS_PATH = "C:/Users/catal/OneDrive/Desktop/dataset";
-    private static final String INDEX_PATH = "C:/Users/catal/OneDrive/Desktop/lucene_index";
+    private static final String FILE_SEPARATOR = FileSystems.getDefault().getSeparator();
+    private static final String DOCS_PATH = "dataset" + FILE_SEPARATOR;
+    private static final String INDEX_PATH = "lucene_index" + FILE_SEPARATOR;
 
     public static void main(String[] args) {
         // Avvio del cronometro globale
@@ -49,9 +51,9 @@ public class Indexer {
         Directory dir = FSDirectory.open(Paths.get(INDEX_PATH));
         Map<String, Analyzer> perFieldAnalyzers = new HashMap<>();
 
-        // CONFIGURAZIONE FINALE DELL'ANALYZER
+        // CONFIGURAZIONE DELL'ANALYZER
         perFieldAnalyzers.put("nome_file", new KeywordAnalyzer()); // Ricerca esatta con supporto PhraseQuery
-        perFieldAnalyzers.put("contenuto", new EnglishAnalyzer()); // Ricerca full-text ottimizzata
+        perFieldAnalyzers.put("contenuto", new EnglishAnalyzer()); // Ricerca full-text
 
         // Uso del PerFieldAnalyzerWrapper (EnglishAnalyzer come default)
         Analyzer perFieldAnalyzer = new PerFieldAnalyzerWrapper(new EnglishAnalyzer(), perFieldAnalyzers);
